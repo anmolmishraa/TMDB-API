@@ -45,25 +45,25 @@ class _HomeState extends State<Home> {
         showErrorLogs: true,
       ),
     );
-
+Map trendintypes = await tmdbWithCustomLogs.v3.genres.getMovieList();
     Map trendingresult = await tmdbWithCustomLogs.v3.trending.getTrending();
    
-    Map trendintypes = await tmdbWithCustomLogs.v3.genres.getMovieList();
+    
   
 
     setState(() {
-
+ trendingtype= trendintypes['genres'];
       trendingmovies = trendingresult['results'];
-      trendingtype=trendintypes['genres'];
+     
     });
    
+
     
   }
 
   @override
   Widget build(BuildContext context) {
-         print(trendingtype);
-         print("object");
+
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -92,9 +92,7 @@ class _HomeState extends State<Home> {
                 onChanged: onSearchTextChanged,
               ),
             ),
-            // if (noDAta)
-            //   Text("No result found!")
-            // else
+       
               searchList.isNotEmpty
                   ? TrendingMovies(
                       trending: searchList,
@@ -104,7 +102,7 @@ class _HomeState extends State<Home> {
                       TrendingMovies(
                           trending: trendingmovies,
                           type: "Adventure",
-                         // trendingtype: trendingtype,
+                          trendingtype: trendingtype,
                         ),
                           TrendingMovies(
                           trending: trendingmovies,
