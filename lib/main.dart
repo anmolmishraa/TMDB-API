@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tmdb/utils/text.dart';
+import 'package:tmdb/secret/keys.dart';
+
 
 import 'package:tmdb/widgets/trending.dart';
 
@@ -24,10 +25,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final String apikey = '1be91b13091b203bd28fbffefe732335';
-  final String readaccesstoken =
-      'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxYmU5MWIxMzA5MWIyMDNiZDI4ZmJmZmVmZTczMjMzNSIsInN1YiI6IjY0MzQyMWZmZTkyZDgzMDExMzA4ODNhZCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.RniAqYb22WV8ZVRuP4BTzY12Q7Cnm7zRsPmkEj_Vozs';
-  List trendingmovies = [];
+   List trendingmovies = [];
+   List trendingtype = [];
   List searchList = [];
   TextEditingController controller = new TextEditingController();
 
@@ -40,7 +39,7 @@ class _HomeState extends State<Home> {
 
   loadmovies() async {
     TMDB tmdbWithCustomLogs = TMDB(
-      ApiKeys(apikey, readaccesstoken),
+      ApiKeys(Keys().apikey, Keys().readaccesstoken),
       logConfig: ConfigLogger(
         showLogs: true,
         showErrorLogs: true,
@@ -48,30 +47,45 @@ class _HomeState extends State<Home> {
     );
 
     Map trendingresult = await tmdbWithCustomLogs.v3.trending.getTrending();
-    print((trendingresult));
+   
+    Map trendintypes = await tmdbWithCustomLogs.v3.genres.getMovieList();
+  
+
     setState(() {
+
       trendingmovies = trendingresult['results'];
+      trendingtype=trendintypes['genres'];
     });
+   
+    
   }
 
   @override
   Widget build(BuildContext context) {
+         print(trendingtype);
     return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.white,
         appBar: AppBar(
-          title: modified_text(text: 'TMDB UI'),
-          backgroundColor: Colors.transparent,
+          title: Text("The Movies" ),
+          backgroundColor: Colors.blue,
         ),
         body: ListView(
           children: [
             //   TV(tv: tv),
             Padding(
               padding:
-                  const EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 5),
-              child: TextField(
+                  const EdgeInsets.only(top: 5, left: 15, right: 15, bottom: 0),
+              child: TextFormField
+              
+              (
+                
                 controller: controller,
                 decoration: new InputDecoration(
-                    hintText: 'Search', border: InputBorder.none),
+                 fillColor: Colors.transparent,
+                 filled: true,
+                
+                 hintStyle: TextStyle(color: Colors.black),
+                    hintText: 'Search'),
                 onChanged: onSearchTextChanged,
               ),
             ),
@@ -82,9 +96,23 @@ class _HomeState extends State<Home> {
                   ? TrendingMovies(
                       trending: searchList,
                     )
-                  : TrendingMovies(
-                      trending: trendingmovies,
-                    ),
+                  : Column(
+                    children: [
+                      TrendingMovies(
+                          trending: trendingmovies,
+                          type: "Adventure",
+                         // trendingtype: trendingtype,
+                        ),
+                          TrendingMovies(
+                          trending: trendingmovies,
+                          type: "Fantasy",
+                        ),
+                          TrendingMovies(
+                          trending: trendingmovies,
+                          type: "Animation"
+                         ),
+                    ],
+                  ),
           ],
         ));
   }
