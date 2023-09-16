@@ -63,6 +63,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
          print(trendingtype);
+         print("object");
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -80,7 +81,9 @@ class _HomeState extends State<Home> {
               (
                 
                 controller: controller,
+                style: TextStyle(color: Colors.black),
                 decoration: new InputDecoration(
+                  
                  fillColor: Colors.transparent,
                  filled: true,
                 

@@ -68,7 +68,7 @@ class TrendingMovies extends StatelessWidget {
                                     
                                       trending![index]['title'] != null
                                           ? trending![index]['title']
-                                          : 'Loading', style: TextStyle(fontSize: 15),),
+                                          : 'Loading', style: TextStyle(fontSize: 15,color: Colors.black),),
                                 )
                               ],
                             ),
